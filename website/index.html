@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nearby – Offline Bluetooth Radar Messenger | Serverless P2P</title>
+  <meta name="description" content="Discover nearby peers on a 60 FPS radar screen and chat peer-to-peer with zero internet, zero servers, and full end-to-end encryption.">
+  <meta name="keywords" content="offline messenger, bluetooth radar, peer-to-peer, wifi direct, encrypted chat, serverless messaging">
+  <meta property="og:title" content="Nearby – Offline Bluetooth Radar Messenger">
+  <meta property="og:description" content="Discover nearby peers on an animated radar screen and chat peer-to-peer with no internet and no servers.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/app_icon.png">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand">
+        <img src="assets/app_icon.png" alt="Nearby Radar Logo" class="brand-icon">
+        <div>
+          <div class="brand-title">NEARBY<span>.RADAR</span></div>
+          <span class="brand-subtitle">100% OFFLINE P2P MESH</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#radar-hero" class="nav-link">Live Radar</a></li>
+        <li><a href="#profile-studio" class="nav-link">Profile Studio</a></li>
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#architecture" class="nav-link">Protocol</a></li>
+        <li><a href="#download" class="nav-link">Download</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="#profile-studio" class="btn btn-outline btn-sm">Create Profile</a>
+        <button id="openDownloadModalBtn" class="btn btn-primary btn-sm">Get APK & QR</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section with Interactive Radar -->
+  <section class="hero" id="radar-hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-pulse"></span>
+          ZERO INTERNET • ZERO SERVERS • 100% ENCRYPTED MESH
+        </div>
+
+        <h1 class="hero-title">
+          Discover Nearby Humans on an <span class="gradient-text">Offline Radar</span> Screen.
+        </h1>
+
+        <p class="hero-desc">
+          No cellular towers. No central accounts. No tracking. An end-to-end encrypted peer-to-peer radar messenger powered strictly by Bluetooth Low Energy beacon discovery and high-speed Android Wi-Fi Direct.
+        </p>
+
+        <div class="hero-cta">
+          <a href="#profile-studio" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            Create Your Radar Profile
+          </a>
+          <button id="heroDownloadBtn" class="btn btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Scan QR to Download APK
+          </button>
+        </div>
+
+        <div class="hero-metrics">
+          <div class="metric-item">
+            <div class="metric-val">0 <span>KB</span></div>
+            <div class="metric-lbl">Internet Data</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-val">60 <span>FPS</span></div>
+            <div class="metric-lbl">Radar Sweep</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-val">&lt;20 <span>ms</span></div>
+            <div class="metric-lbl">BLE Discovery</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-val">50+ <span>MB/s</span></div>
+            <div class="metric-lbl">Wi-Fi Direct Speed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Interactive Radar Canvas -->
+      <div class="radar-stage">
+        <div class="radar-wrapper">
+          <canvas id="radarCanvas" width="440" height="440"></canvas>
+        </div>
+        <div class="radar-controls">
+          <button id="toggleAudioBtn" class="radar-ctrl-btn">
+            <span id="audioIcon">🔇</span> Audio Ping: <span id="audioStatusText">OFF</span>
+          </button>
+          <span style="color: var(--border-subtle)">|</span>
+          <button id="addPeerBtn" class="radar-ctrl-btn">
+            <span>➕</span> Spawn Simulated Peer
+          </button>
+        </div>
+        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 32px; font-family: var(--font-mono);">
+          Click anywhere inside the radar ring to drop a peer or ping a blip!
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Profile Creation Studio Section -->
+  <section class="section" id="profile-studio">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Identity Forge</span>
+        <h2 class="section-title">Create Your Radar Profile</h2>
+        <p class="section-desc">
+          Craft your decentralized offline persona. When saved, you will immediately receive an APK download QR code and a profile sync code to import into the mobile app.
+        </p>
+      </div>
+
+      <div class="studio-grid">
+        <!-- Profile Editor Form -->
+        <div class="studio-card">
+          <div class="form-group">
+            <label class="form-label" for="displayNameInput">
+              <span>Display Name</span>
+              <span class="form-label-hint" id="randomizeNameBtn" style="cursor: pointer;">🎲 Randomize</span>
+            </label>
+            <input type="text" id="displayNameInput" class="form-input" value="Echo Explorer" maxlength="24" placeholder="Enter radar nickname...">
+          </div>
+
+          <!-- Avatar Picker -->
+          <div class="form-group">
+            <label class="form-label">
+              <span>Avatar (Auto-clamped &le; 30 KB for BLE)</span>
+              <span class="form-label-hint">Preset or Custom</span>
+            </label>
+            <div class="avatar-selection-row">
+              <div class="preset-avatar selected" data-avatar="🦊">🦊</div>
+              <div class="preset-avatar" data-avatar="⚡">⚡</div>
+              <div class="preset-avatar" data-avatar="🛰️">🛰️</div>
+              <div class="preset-avatar" data-avatar="👾">👾</div>
+              <div class="preset-avatar" data-avatar="🛡️">🛡️</div>
+              <label class="avatar-upload-btn" for="avatarFileInput">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                Upload Photo
+              </label>
+              <input type="file" id="avatarFileInput" accept="image/*" style="display: none;">
+            </div>
+          </div>
+
+          <!-- Presence Status -->
+          <div class="form-group">
+            <label class="form-label">
+              <span>Presence Status</span>
+              <span class="form-label-hint">Broadcasted on BLE Beacon</span>
+            </label>
+            <div class="status-pill-group">
+              <div class="status-pill selected" data-status="0">
+                <span class="status-dot available"></span> Available
+              </div>
+              <div class="status-pill" data-status="1">
+                <span class="status-dot busy"></span> Busy
+              </div>
+              <div class="status-pill" data-status="2">
+                <span class="status-dot invisible"></span> Invisible
+              </div>
+            </div>
+          </div>
+
+          <!-- Short Bio -->
+          <div class="form-group">
+            <label class="form-label" for="bioInput">
+              <span>Short Bio</span>
+              <span class="form-label-hint"><span id="bioCharCount">34</span>/80</span>
+            </label>
+            <input type="text" id="bioInput" class="form-input" value="Exploring offline mesh networks." maxlength="80" placeholder="Short description seen upon tapping your blip...">
+          </div>
+
+          <!-- Interest Tags -->
+          <div class="form-group">
+            <label class="form-label">
+              <span>Interest Tags</span>
+              <span class="form-label-hint">Helps nearby contacts find you</span>
+            </label>
+            <div class="tags-container" id="tagsContainer">
+              <span class="tag-badge">#Radar <span class="tag-remove" data-tag="Radar">×</span></span>
+              <span class="tag-badge">#P2P <span class="tag-remove" data-tag="P2P">×</span></span>
+              <span class="tag-badge">#Privacy <span class="tag-remove" data-tag="Privacy">×</span></span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="newTagInput" class="form-input" placeholder="Add tag (e.g. #Mesh, #OffGrid)..." style="flex: 1;">
+              <button id="addTagBtn" class="btn btn-outline btn-sm">Add</button>
+            </div>
+          </div>
+
+          <!-- Cryptographic Identity Readout -->
+          <div class="crypto-identity-box">
+            <div class="crypto-row">
+              <span class="crypto-key">X25519 Public Key:</span>
+              <span class="crypto-val" id="cryptoKeyDisplay">e4c1...892b</span>
+            </div>
+            <div class="crypto-row">
+              <span class="crypto-key">6-Digit Safety Code:</span>
+              <span class="crypto-val" id="safetyCodeDisplay">491 823</span>
+            </div>
+            <div class="crypto-row">
+              <span class="crypto-key">Device UUID:</span>
+              <span class="crypto-val" id="deviceUuidDisplay">8f12a...7c19</span>
+            </div>
+          </div>
+
+          <button id="saveProfileBtn" class="btn btn-primary" style="width: 100%;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Save Profile &amp; Show APK Download QR
+          </button>
+        </div>
+
+        <!-- Live Real-time Mobile Preview -->
+        <div class="preview-stage">
+          <div class="mobile-preview-frame">
+            <div class="mobile-notch"></div>
+            
+            <div class="app-screen-header">
+              <div class="app-screen-title">Nearby Radar</div>
+              <div style="font-size: 0.72rem; color: var(--neon-green); font-family: var(--font-mono);">● SCANNING</div>
+            </div>
+
+            <!-- Simulated Blip on Mini-Radar -->
+            <div class="preview-radar-circle">
+              <div class="preview-blip" id="previewBlipAvatar">🦊</div>
+              <div style="position: absolute; bottom: 8px; font-size: 0.65rem; color: var(--text-muted); font-family: var(--font-mono);">
+                Target: <span id="previewDistanceText">&lt;2m</span>
+              </div>
+            </div>
+
+            <!-- Live Profile Bottom Sheet Preview -->
+            <div class="preview-bottom-sheet">
+              <div class="preview-sheet-header">
+                <div class="preview-avatar-large" id="previewSheetAvatar">🦊</div>
+                <div>
+                  <div class="preview-name" id="previewNameDisplay">Echo Explorer</div>
+                  <div class="preview-distance-badge">
+                    <span>📡</span> <span id="previewStatusBadge">Available • ~2 m</span>
+                  </div>
+                </div>
+              </div>
+              <p class="preview-bio" id="previewBioDisplay">Exploring offline mesh networks.</p>
+              
+              <div class="preview-safety-code">
+                Safety Fingerprint: <strong id="previewSafetyCodeBadge">491 823</strong>
+              </div>
+
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-primary btn-sm" style="flex: 1; pointer-events: none;">Connect</button>
+                <button class="btn btn-outline btn-sm" style="pointer-events: none;">Block</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+            Live Mobile Rendering: Exactly how nearby peers will see you when you enter their range.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Showcase -->
+  <section class="section" id="features" style="background: rgba(9, 14, 26, 0.4);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Core Innovations</span>
+        <h2 class="section-title">Built for Sovereign Communications</h2>
+        <p class="section-desc">
+          Engineered for festivals, natural emergencies, flights, remote expeditions, and privacy-conscious communities.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-box">🎯</div>
+          <h3 class="feature-title">60 FPS Concentric Radar</h3>
+          <p class="feature-desc">
+            Visual distance rings for &lt;2m, ~5m, and ~10m+ calculated with Kalman-smoothed RSSI filters and deterministic angle hashing so blips never jitter.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box">🔐</div>
+          <h3 class="feature-title">XChaCha20-Poly1305 E2EE</h3>
+          <p class="feature-desc">
+            Ephemeral Diffie-Hellman key exchange provides forward secrecy. Compare a 6-digit visual safety code to verify authenticity with no certificate authority.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box">📦</div>
+          <h3 class="feature-title">Smart Offline Queue</h3>
+          <p class="feature-desc">
+            Messages composed while contacts are out of range are persisted in SQLite and auto-flushed the microsecond their beacon is detected on radar.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box">⚡</div>
+          <h3 class="feature-title">Dual-Engine Transfer</h3>
+          <p class="feature-desc">
+            Small payloads stream over BLE GATT with CRC32 checksums. Large 4K videos and PDFs negotiate Android Wi-Fi Direct for 50+ MB/s transfers.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box">🛡️</div>
+          <h3 class="feature-title">ConnectedDevice Service</h3>
+          <p class="feature-desc">
+            Android foreground service keeps scanning and advertising active continuously even when your phone is locked or tucked in your backpack.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box">👁️</div>
+          <h3 class="feature-title">Zero-Trace Invisible Mode</h3>
+          <p class="feature-desc">
+            Stop advertising your beacon completely while continuing to scan and monitor the radar mesh for nearby friends.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Architecture & Packet Protocol -->
+  <section class="section" id="architecture">
+    <div class="container">
+      <div class="arch-card">
+        <div class="arch-card-grid">
+          <div>
+            <span class="section-tag">Wire Protocol</span>
+            <h2 class="section-title">The Serverless BLE &amp; Wi-Fi P2P Architecture</h2>
+            <p class="section-desc" style="margin-bottom: 20px;">
+              Nearby replaces centralized internet servers with physical radio negotiation. Devices discover each other via 128-bit custom Service UUID advertisements:
+            </p>
+            <ul style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8; margin-left: 20px;">
+              <li><strong>BLE Service UUID:</strong> <code style="color: var(--neon-cyan)">0000fee0-0000-1000-8000-00805f9b34fb</code></li>
+              <li><strong>Packet Structure:</strong> Sequence numbers, 32-bit CRC, and final SHA-256 chunk assembly</li>
+              <li><strong>Wi-Fi Direct P2P:</strong> Negotiated over GATT; establishes direct socket streams on port 8988</li>
+            </ul>
+
+            <div class="packet-diagram">
+              <div class="packet-header">BLE L2CAP / GATT CHUNK FRAME</div>
+              <div class="packet-blocks">
+                <div class="packet-block">TransferId (4B)</div>
+                <div class="packet-block">SeqNum (2B)</div>
+                <div class="packet-block">TotalChunks (2B)</div>
+                <div class="packet-block">CRC32 (4B)</div>
+                <div class="packet-block" style="flex: 1; text-align: center;">Encrypted Payload (up to 480B)</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center;">
+            <img src="assets/mobile_mockup.png" alt="Nearby Architecture Mockup" style="max-width: 100%; border-radius: 18px; border: 1px solid var(--border-glow); box-shadow: var(--shadow-glow);">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download & QR Code Section -->
+  <section class="section" id="download" style="background: radial-gradient(circle at 50% 50%, rgba(0, 245, 212, 0.05) 0%, transparent 60%);">
+    <div class="container" style="text-align: center;">
+      <span class="section-tag">Direct App Distribution</span>
+      <h2 class="section-title">Download Nearby for Mobile</h2>
+      <p class="section-desc" style="margin-bottom: 40px;">
+        Scan the QR code with your phone camera or download the APK directly.
+      </p>
+
+      <div style="display: inline-block; background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: var(--radius-xl); padding: 36px; box-shadow: var(--shadow-card); max-width: 520px; width: 100%;">
+        <div class="qr-canvas-wrapper" style="margin: 0 auto 20px; width: fit-content;">
+          <canvas id="sectionQrCanvas" width="220" height="220"></canvas>
+        </div>
+
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 6px;">Nearby Radar v1.0.0 APK</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">
+          Compatible with Android 8.0+ (API 26+) &amp; iOS 14+
+        </p>
+
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <a href="download/Nearby-Radar-v1.0.0.apk" id="directApkDownloadBtn" class="btn btn-primary" download="Nearby-Radar-v1.0.0.apk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download APK (32 MB)
+          </a>
+          <button id="showProfileQrBtn" class="btn btn-outline">
+            Show My Profile Sync QR
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QR Code Modal (Triggered on Profile Save or APK Click) -->
+  <div class="modal-overlay" id="qrModal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeModalBtn">&times;</button>
+
+      <div class="modal-tabs">
+        <button class="modal-tab-btn active" data-tab="android">Android APK</button>
+        <button class="modal-tab-btn" data-tab="ios">iOS TestFlight</button>
+        <button class="modal-tab-btn" data-tab="profile">Profile Sync QR</button>
+      </div>
+
+      <div class="qr-display-box">
+        <div class="qr-canvas-wrapper">
+          <canvas id="modalQrCanvas" width="240" height="240"></canvas>
+        </div>
+        <p class="qr-scan-hint" id="modalQrHint">
+          Point your phone camera at this QR code to download <strong>Nearby-Radar-v1.0.0.apk</strong> directly.
+        </p>
+      </div>
+
+      <div id="modalActionContainer" style="display: flex; gap: 10px; justify-content: center;">
+        <a href="download/Nearby-Radar-v1.0.0.apk" id="modalDownloadBtn" class="btn btn-primary btn-sm" download="Nearby-Radar-v1.0.0.apk">
+          Direct Download (.apk)
+        </a>
+        <button id="copyDownloadLinkBtn" class="btn btn-outline btn-sm">Copy Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="brand" style="margin-bottom: 14px;">
+            <img src="assets/app_icon.png" alt="Nearby Radar Logo" class="brand-icon" style="width: 32px; height: 32px;">
+            <div class="brand-title" style="font-size: 1.15rem;">NEARBY<span>.RADAR</span></div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; max-width: 320px;">
+            Decentralized, serverless offline radar messenger. Built for absolute privacy and resilience without phone numbers, cellular signals, or third-party servers.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#radar-hero">Live Radar</a></li>
+            <li><a href="#profile-studio">Profile Studio</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#architecture">Protocol Details</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Technology</h4>
+          <ul class="footer-links">
+            <li><a href="#">Flutter &amp; Dart</a></li>
+            <li><a href="#">Kotlin GATT Server</a></li>
+            <li><a href="#">Android Wi-Fi Direct</a></li>
+            <li><a href="#">Libsodium X25519</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Privacy</h4>
+          <ul class="footer-links">
+            <li><a href="#">No Telemetry</a></li>
+            <li><a href="#">No Accounts</a></li>
+            <li><a href="#">Local Drift DB</a></li>
+            <li><a href="#">Open Source</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Nearby Radar Project. 100% Offline &amp; Open Source.</div>
+        <div style="font-family: var(--font-mono); color: var(--neon-cyan);">BLE GATT • Wi-Fi P2P • XChaCha20-Poly1305</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="qr_generator.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+name: nearby_radar
+description: "Nearby - Offline Bluetooth Radar Messenger"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management & Architecture
+  flutter_riverpod: ^2.5.1
+
+  # Bluetooth Low Energy
+  flutter_blue_plus: ^1.34.5
+
+  # Database & Persistence
+  drift: ^2.20.0
+  drift_flutter: ^0.1.0
+  sqlite3_flutter_libs: ^0.5.24
+  path_provider: ^2.1.4
+  shared_preferences: ^2.3.2
+  flutter_secure_storage: ^9.2.2
+
+  # Cryptography & Security
+  crypto: ^3.0.3
+  local_auth: ^2.2.0
+
+  # Permissions & Device Info
+  permission_handler: ^11.3.1
+
+  # Media & File Handlers
+  image_picker: ^1.1.2
+  file_picker: ^8.0.7
+  open_filex: ^4.5.0
+  record: ^5.1.2
+  audioplayers: ^6.0.0
+
+  # Notifications
+  flutter_local_notifications: ^17.2.2
+
+  # UI, Icons, Animations & Fonts
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.0
+  intl: ^0.19.0
+  uuid: ^4.4.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  drift_dev: ^2.20.0
+  build_runner: ^2.4.9
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/
+    - assets/sounds/

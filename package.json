@@ -1,0 +1,25 @@
+{
+  "name": "nearby-radar",
+  "version": "1.0.0",
+  "description": "Nearby - Offline Bluetooth Radar Messenger & Web Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'Website ready for deployment'"
+  },
+  "keywords": [
+    "nearby",
+    "radar",
+    "offline",
+    "bluetooth",
+    "p2p",
+    "mesh",
+    "messenger"
+  ],
+  "author": "Atharva Likhar",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
